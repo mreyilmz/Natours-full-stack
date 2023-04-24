@@ -18,7 +18,7 @@ export const login = async (email, password) => {
     const res = await axios({
       // axios'u incelemeliyiz
       method: 'POST',
-      url: 'http://127.0.0.1:3000/api/v1/users/login',
+      url: '/api/v1/users/login',
       data: {
         email,
         password,
@@ -40,7 +40,7 @@ export const logout = async () => {
   try {
     const res = await axios({
       method: 'GET',
-      url: 'http://127.0.0.1:3000/api/v1/users/logout',
+      url: '/api/v1/users/logout',
     });
 
     // Really important is that we actually need to set it to true here, and that will then force a reload from the server and not from browser cache. So this part here is really important again because otherwise it might simply load the same page from the cache which would then still have our user menu up there. But of course that's not what we want, we really want a fresh page coming down from the server.

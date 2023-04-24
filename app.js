@@ -7,6 +7,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp'); // HTTP Parameter Pollution
 const cookieParser = require('cookie-Parser'); // Kullanıcıdan cookie'yi okuyabilmek için kullandık. npm i cookie-parser
+const compression = require('compression'); // This package gonna compress all our responses. So basically, whenever we send a text response to a client, no matter if that's JSON or HTML code. With the compression package, that text will then be dramatically compressed.
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -99,6 +100,8 @@ app.use(
     ],
   })
 );
+
+app.use(compression()); // Compression here will return a middleware function which is going to compress all the text that is sent to clients. So it's not going to be working for images because these are usually already compressed.
 
 ////////////  Test middleware
 app.use((req, res, next) => {

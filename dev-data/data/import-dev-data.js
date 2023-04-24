@@ -61,7 +61,7 @@ const deleteData = async () => {
 */
 // Yukarıdaki array'da iki eleman var. İlki node.js'nin absolute path'i. İkincisi ise .js dosyamızın absolute pathi.
 // Fakat node dev-data/data/import-dev-data.js firstArg secondArg ... komutuyla ilk iki elemandan sonra argumentlar verebiliyoruz. Hoca 3. eleman yani ilk argument olarak --import veya --delete verdi ve bu değerlere göre de fonksiyonlar çalıştırdı. Argument olarak istediğimiz şeyi girebiliriz. Baştaki dash'ler şart değil.
-console.log(process.argv);
+// console.log(process.argv);
 
 if (process.argv[2] === '--import') {
   importData();
