@@ -6,7 +6,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp'); // HTTP Parameter Pollution
-const cookieParser = require('cookie-Parser'); // Kullanıcıdan cookie'yi okuyabilmek için kullandık. npm i cookie-parser
+const cookieParser = require('cookie-parser'); // Kullanıcıdan cookie'yi okuyabilmek için kullandık. npm i cookie-parser
 const compression = require('compression'); // This package gonna compress all our responses. So basically, whenever we send a text response to a client, no matter if that's JSON or HTML code. With the compression package, that text will then be dramatically compressed.
 
 const AppError = require('./utils/appError');
