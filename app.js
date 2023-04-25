@@ -8,6 +8,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp'); // HTTP Parameter Pollution
 const cookieParser = require('cookie-parser'); // Kullanıcıdan cookie'yi okuyabilmek için kullandık. npm i cookie-parser
 const compression = require('compression'); // This package gonna compress all our responses. So basically, whenever we send a text response to a client, no matter if that's JSON or HTML code. With the compression package, that text will then be dramatically compressed.
+const cors = require('cors'); // CORS = Cross-origin Source Sharing
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -41,6 +42,13 @@ app.set('view engine', 'pug'); // npm i pug ile indirdik.
 app.set('views', path.join(__dirname, 'views'));
 
 ////////////////////// 1) GLOBAL MIDDLEWARES
+//////////// Implement CORS
+app.use(cors()); // What this does is to set the Access-Control-Allow-Origin header to everything. So this was the first part of enabling CORS, but actually that's not all, because right now this will only work for so-called simple requests. And simple requests are get and post requests. On the other hand, we have so-called non-simple requests. And these are put, patch and delete requests, and also requests that send cookies or use nonstandard headers. And these non-simple requests, they require a so-called preflight phase. So whenever there is a non-simple request, the browser will then automatically issue the preflight phase, and this is how that works.
+
+// So before the real request actually happens, and let's say a delete request, the browser first does an options request in order to figure out if the actual request is safe to send. And so what that means for us developers is that on our server we need to actually respond to that options request. And options is really just another HTTP method, so just like get, post or delete, all right? So basically when we get one of these options requests on our server, we then need to send back the same Access-Control-Allow-Origin header. And this way the browser will then know that the actual request, and in this case the delete request, is safe to perform, and then executes the delete request itself.
+// So .options is not to set any options on our application, it's really just another HTTP method that we can respond to. In this case we need to respond to it because the browser sends an option request when there is a preflight phase. So we need to define the route for which we want to handle the options.
+app.options('*', cors());
+
 //////////// Serving static Files
 // app.use(express.static(`${__dirname}/public`));
 app.use(express.static(path.join(__dirname, 'public'))); // Yukarıdaki satırla aynı işlevi görüyor fakat bunun slash hatırlama zorunluluğu kendi hallediyor o yüzden daha avantajlı
