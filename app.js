@@ -15,8 +15,9 @@ const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
-const viewRouter = require('./routes/viewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
+const bookingController = require('./controllers/bookingController');
+const viewRouter = require('./routes/viewRoutes');
 
 // Further HELMET configuration for Security Policy (CSP)
 const scriptSrcUrls = [
@@ -84,6 +85,17 @@ const limiter = rateLimit({
 });
 // api ile başlayan tüm route'lara limiter ile sınırlandırma getirdik.
 app.use('/api', limiter);
+
+// Basically we're gonna specify a URL here to which Stripe will automatically send a POST request to whenever a checkout session has successfully completed, so basically whenever a payment was successful. With that POST request, Stripe will then send back the original session data that we created in the first step when we created that checkout session. That's the reason why we actually needed our website to be deployed here because now we need to specify that real-life URL here.
+// Bu adrese webhook ekledik https://natours-0huh.onrender.com/webhook-checkout ve event olarak da checkout_session_completed seçtik
+
+// Now why do we actually define this webhook-checkout right here in app.js instead of doing it for example in the bookingRouter. The reason for that is that in this handler function, when we receive the body from Stripe, the Stripe function that we're then gonna use to actually read the body needs this body in a raw form, so basically as a string and not as JSON.
+// That's the whole reason why we need to use express.raw
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  bookingController.webhookCheckout
+);
 
 //////////// Body parser, reaing data from the body into req.body
 app.use(express.json({ limit: '10kb' }));
