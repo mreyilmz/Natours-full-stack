@@ -35,7 +35,9 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
           product_data: {
             name: `${tour.name} Tour`,
             description: tour.summary,
-            images: [`https://www.natours.dev/img/tours/${tour.imageCover}`],
+            images: [
+              `${req.protocol}://www.natours.dev/img/tours/${tour.imageCover}`,
+            ],
           },
         },
       },
@@ -82,7 +84,7 @@ exports.webhookCheckout = (req, res, next) => {
   }
 
   // Remember that in our Stripe dashboard, that's exactly the type that we defined here. So, that's the event type. Now we're checking if that is really the event that we are receiving here just to be 100% sure. If it is, we then want to actually use the event to create our booking in our database.
-  if (event.type === 'checkout.session.complete')
+  if (event.type === 'checkout.session.completed')
     createBookingCheckout(event.data.object);
 
   res.status(200).json({ received: true });
