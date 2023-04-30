@@ -94,7 +94,7 @@ app.use('/api', limiter);
 // That's the whole reason why we need to use express.raw
 app.post(
   '/webhook-checkout',
-  express.raw({ type: '*/*' }),
+  express.raw({ type: 'application/json' }),
   bookingController.webhookCheckout
 );
 
