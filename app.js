@@ -7,6 +7,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp'); // HTTP Parameter Pollution
 const cookieParser = require('cookie-parser'); // Kullanıcıdan cookie'yi okuyabilmek için kullandık. npm i cookie-parser
+const bodyParser = require('body-parser');
 const compression = require('compression'); // This package gonna compress all our responses. So basically, whenever we send a text response to a client, no matter if that's JSON or HTML code. With the compression package, that text will then be dramatically compressed.
 const cors = require('cors'); // CORS = Cross-origin Source Sharing
 
@@ -93,7 +94,7 @@ app.use('/api', limiter);
 // That's the whole reason why we need to use express.raw
 app.post(
   '/webhook-checkout',
-  express.raw({ type: 'application/json' }),
+  express.raw({ type: '*/*' }),
   bookingController.webhookCheckout
 );
 
